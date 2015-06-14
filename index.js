@@ -55,3 +55,7 @@ app.get('/actions/previous', routes.previous);
 app.get('/actions/next', routes.next);
 app.get('/actions/playstop', routes.playstop);
 app.get('/actions/record', routes.record);
+app.get('/actions/volume-down/ky', routes.volumeDownKy);
+app.get('/actions/volume-down/wy', routes.volumeDownWy);
+app.get('/actions/volume-up/ky', routes.volumeUpKy);
+app.get('/actions-volume-up/wy', routes.volumeUpWy);

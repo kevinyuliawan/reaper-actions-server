@@ -64,7 +64,11 @@ function calcActions(){
     "/actions/previous": '.action-backward',
     "/actions/next": '.action-forward',
     "/actions/playstop": '.action-play-stop',
-    "/actions/record": '.action-record'
+    "/actions/record": '.action-record',
+    "/actions/volume-down/ky": '.action-volume-down.volume-ky',
+    "/actions/volume-up/ky": '.action-volume-up.volume-ky',
+    "/actions/volume-down/wy": '.action-volume-down.volume-wy',
+    "/actions/volume-up/wy": '.action-volume-down.volume-wy'
   }
   var all = $();
   simulateToggle.record = 0; //initialize these property to 0 to treat it as a static variable. confusing to do this here, I know
@@ -72,11 +76,20 @@ function calcActions(){
   $.each(allObj, function(key, val){  
     var valSelector = $(val);
     all = all.add(val); //set up the all selector
+    function setupClickHandler(next, ignore){
+      $(val).click(function(){
+        if($(val).attr("disabled")) return; //dont do anything if button is currently disabled
+        if(!ignore){ //used for the volume, dont want to ignore if pressed multiple times
+          all.attr("disabled", "disabled");
+          setTimeout(function(){ all.removeAttr("disabled") }, 500)
+        }
+        next();
+      });
+    }
     switch (val){
       case '.action-play-stop':
       case '.action-record':
-        valSelector.click(function(){
-          //todo: disable buttons from being spammed
+        setupClickHandler(function(){
           if(simulateToggle.record === 1){ //if you hit record again while it's recording, then stop it/send a spacebar
             $.get("/actions/playstop", function(data){
               setAlert(data);
@@ -90,8 +103,9 @@ function calcActions(){
           calculateToggleStyling();
         });
         break;
-      default:
-        valSelector.click(function(){ //set up the click handlers
+      case '.action-backward':
+      case '.action-forward':
+        setupClickHandler(function(){
           simulateToggle.record = 0; //reset these in case previous/next is being called while it was recording
           simulateToggle.playstop = 0;
           calculateToggleStyling();
@@ -101,9 +115,19 @@ function calcActions(){
             setAlert(data);
           });
         });
+        break;
+      default:
+        setupClickHandler(function(){
+          simulatePress(valSelector); //don't need to remove everything else when pressing volume buttons
+          $.get(key, function(data){
+            setAlert(data);
+          })
+        }, true); //ignore the setting of disabled by setting 'ignore' to true
     }
   });
 }
+
+
 
 function simulatePress(selector){
   selector.addClass("active");
