@@ -22,24 +22,18 @@ function sendKey(command) {
     var findWindow = __dirname + '\\findWindow.py "'+config.programName+'"';
     //make the key call a function since the window can change
     function key(foundWin32, command){ return __dirname + '\\key.py "'+foundWin32+'" '+command; }
-    if(foundWin32){
-      console.log("sending");
-      exec(key(foundWin32,command), function(error, stdout){
-        if(error!=null){ console.log("uh...", error); }
-        else{ console.log("successfully sent"); }
-      });
-    }else{
-      exec(findWindow, function(error, stdout){
-        if(error != null){ console.log("uh oh...", error); }
-        else{
-          foundWin32 = stdout.trim();
-          exec(key(foundWin32,command), function(error, stdout){
-            if(error!=null){ console.log("uhh ohh...", error); }
-            else{ console.log("done"); }
-          });
-        }
-      });
-    }
+    //call findWindow everytime, it's a little inefficient but sometimes REAPER will change the window title e.g. if the track is modified
+    exec(findWindow, function(error, stdout){
+      if(error != null){ console.log("uh oh...", error); }
+      else{
+        foundWin32 = stdout.trim();
+        exec(key(foundWin32,command), function(error, stdout){
+          if(error!=null){ console.log("uhh ohh...", error); }
+          else{ console.log("done"); }
+        });
+      }
+    });
+    
   }
   else{ //Send to preset window under other (linux) systems
     exec('xdotool key --window ' + windowID + ' --delay ' + config.delay + ' ' + key);

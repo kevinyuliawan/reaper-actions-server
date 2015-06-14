@@ -4,22 +4,14 @@ import win32api
 import win32con
 import win32ui
 import time,sys
-import ctypes
-import logging
-
 
 keyDelay = 0.1
 keymap = {
-    "Up": win32con.VK_UP,
-    "Left": win32con.VK_LEFT,
-    "Down": win32con.VK_DOWN,
-    "Right": win32con.VK_RIGHT,
-    "b": ord("B"),
-    "a": ord("A"),
-    "y": ord("Y"), #for NDS
-    "x": ord("X"), #for NDS
-    "s": ord("S"), #start
-    "e": ord("E") #select
+    #https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+    "previous": int(0xDB), #the "[{" key
+    "next": int(0xDD), #the "]}" key
+    "playstop": win32con.VK_SPACE,
+    "record": win32con.VK_F1
 }
 
 def sendKey(button):
@@ -31,4 +23,4 @@ if __name__ == "__main__":
     win = win32ui.FindWindow(None, sys.argv[1])
     win.SetForegroundWindow()
     win.SetFocus()
-    #sendKey(sys.argv[2])
+    sendKey(sys.argv[2])
