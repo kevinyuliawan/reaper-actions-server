@@ -52,7 +52,9 @@ function calcSong(){
 function parseSong(song){
   var temp = song.split(' ');
   for(var i=0;i<temp.length;i++){
-    temp[i] = temp[i][0].toUpperCase() + temp[i].substr(1);
+    if(temp[i].length>0){
+      temp[i] = temp[i][0].toUpperCase() + temp[i].substr(1);
+    }
   }
   $('.song-info').html(temp.join(' '));
 }
