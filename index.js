@@ -4,7 +4,6 @@ var express = require("express");
 var app = express();
 var port = process.env.PORT || 5000;
 var bodyParser = require('body-parser');
-var routes = require('./routes.js');
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
@@ -12,24 +11,32 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 app.use("/", express.static(__dirname + "/public"));
 
-app.post('/song', routes.song );
-
 var server = http.createServer(app)
 server.listen(port)
 console.log("http server listening on %d", port)
 
-var wss = new WebSocketServer({server: server})
-console.log("websocket server created")
+var wss = new WebSocketServer({server: server});
+console.log("websocket server created");
 
 wss.on("connection", function(ws) {
-  var id = setInterval(function() {
-    ws.send(JSON.stringify(new Date()), function() {  })
-  }, 1000)
-
-  console.log("websocket connection open")
+  console.log("websocket connection open");
 
   ws.on("close", function() {
-    console.log("websocket connection close")
-    clearInterval(id)
+    console.log("websocket connection close");
   })
-})
+});
+
+//set up the broadcast function
+wss.broadcast = function broadcast(data){
+  wss.clients.forEach(function each(client){
+      client.send(data);
+  });
+  console.log("broadcasted: " + data);
+};
+
+app.post('/song', function(req, res){
+  wss.broadcast(JSON.stringify({
+    song: req.body.song
+  }));
+  res.end("OK");
+});
