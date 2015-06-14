@@ -194,6 +194,6 @@ function calcSubmit(){
       song: $('#song').val()
     };
     $('#song').val('');
-    $.post("/song", info); //don't need a success callback since we'll be broadcasting the info using websockets
+    $.post("/actions/updatesong", info); //don't need a success callback since we'll be broadcasting the info using websockets
   });
 }

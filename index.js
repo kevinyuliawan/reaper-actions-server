@@ -3,7 +3,8 @@ var http = require("http");
 var express = require("express");
 var app = express();
 var port = process.env.PORT || 5000;
-var routes = require('./routes.js');
+var ClientActions = require('./ClientActions');
+var BroadcastActions = require('./BroadcastActions');
 var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -17,8 +18,6 @@ server.listen(port)
 console.log("http server listening on %d", port)
 
 var wss = new WebSocketServer({server: server});
-console.log("websocket server created");
-
 wss.on("connection", function(ws) {
   console.log("websocket connection open");
 
@@ -35,27 +34,28 @@ wss.broadcast = function(data){
   console.log("broadcasted: " + data);
 };
 
-var song = "Queen - Don't Stop Me Now"; //initialize the song on first request
+//initialize the song on first request
+//arbitrarily put it on the wss object so that that's the only thing we have to pass around
+wss.song = "Queen - Don't Stop Me Now"; 
 app.get('/song', function(req, res){
   res.send(JSON.stringify({ //only send as needed, no need to broadcast
-    song: song
+    song: wss.song
   }));
 });
 
-app.post('/song', function(req, res){
-  song = req.body.song;
-  wss.broadcast(JSON.stringify({
-    song: song
-  }));
-  res.end("OK");
-});
+var broadcastActions = new BroadcastActions(wss); //set up with the wss
+var clientActions = new ClientActions(wss);
 
 //the keyboard actions
-app.get('/actions/previous', routes.previous);
-app.get('/actions/next', routes.next);
-app.get('/actions/playstop', routes.playstop);
-app.get('/actions/record', routes.record);
-app.get('/actions/volume-down/ky', routes.volumeDownKy);
-app.get('/actions/volume-down/wy', routes.volumeDownWy);
-app.get('/actions/volume-up/ky', routes.volumeUpKy);
-app.get('/actions/volume-up/wy', routes.volumeUpWy);
+app.get('/actions/previous', clientActions.previous);
+app.get('/actions/next', clientActions.next);
+app.get('/actions/playstop', clientActions.playstop);
+app.get('/actions/record', clientActions.record);
+app.get('/actions/volume-down/ky', clientActions.volumeDownKy);
+app.get('/actions/volume-down/wy', clientActions.volumeDownWy);
+app.get('/actions/volume-up/ky', clientActions.volumeUpKy);
+app.get('/actions/volume-up/wy', clientActions.volumeUpWy);
+
+app.post('/actions/playstop', broadcastActions.playstop);
+app.post('/actions/record', broadcastActions.record);
+app.post('/actions/updatesong', broadcastActions.updatesong);
