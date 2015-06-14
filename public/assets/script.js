@@ -56,7 +56,7 @@ function parseSong(song){
       temp[i] = temp[i][0].toUpperCase() + temp[i].substr(1);
     }
   }
-  $('.song-info').html(temp.join(' '));
+  $('.song-info').html(temp.join(' ').replace('-', '<span class="dash">-</span>'));
 }
 
 function calcActions(){
