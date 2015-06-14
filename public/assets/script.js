@@ -74,11 +74,17 @@ function calcActions(){
       case '.action-play-stop':
       case '.action-record':
         valSelector.click(function(){
+          if(simulateToggle.record === 1){ //if you hit record again while it's recording, then stop it/send a spacebar
+            $.get("/actions/playstop", function(data){
+              setAlert(data);
+            });
+          }else{
+            $.get(key, function(data){
+              setAlert(data);
+            })
+          }
           simulateToggle(val);
           calculateToggleStyling();
-          $.get(key, function(data){
-            setAlert(data);
-          })
         });
         break;
       default:
