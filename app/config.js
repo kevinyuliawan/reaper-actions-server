@@ -13,7 +13,7 @@ function os(){
 
 module.exports = {
   os: os(),
-  programName: process.env.CONFIG_PROGRAM_NAME || "TextEdit",
+  programName: process.env.CONFIG_PROGRAM_NAME || "REAPER",
   afterDelay: 10,
   // Linux: delay between each possible keypress in ms (can't be too fast)
   // If you want to change delay for windows - change key.py

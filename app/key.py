@@ -4,6 +4,9 @@ import win32api
 import win32con
 import win32ui
 import time,sys
+import ctypes
+import logging
+
 
 keyDelay = 0.1
 keymap = {
@@ -28,4 +31,4 @@ if __name__ == "__main__":
     win = win32ui.FindWindow(None, sys.argv[1])
     win.SetForegroundWindow()
     win.SetFocus()
-    sendKey(sys.argv[2])
+    #sendKey(sys.argv[2])
