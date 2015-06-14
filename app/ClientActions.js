@@ -18,7 +18,7 @@ function sendKey(command) {
     exec('cliclick ' + config.commands.macintosh[command]);
   }
   else if(config.os === "windows"){ //windows: use key.py
-    exec('key.py' + '  ' + config.programName + ' ' + key);
+    exec('key.py' + '  ' + config.programName + ' ' + command);
   }
   else{ //Send to preset window under other (linux) systems
     exec('xdotool key --window ' + windowID + ' --delay ' + config.delay + ' ' + key);

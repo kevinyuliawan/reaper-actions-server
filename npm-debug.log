@@ -1,34 +1,36 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
-2 info using npm@2.5.1
-3 info using node@v0.12.0
+1 verbose cli [ 'c:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'c:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'start' ]
+2 info using npm@2.10.1
+3 info using node@v0.12.4
 4 verbose run-script [ 'prestart', 'start', 'poststart' ]
 5 info prestart reaper-actions-server@0.0.1
 6 info start reaper-actions-server@0.0.1
 7 verbose unsafe-perm in lifecycle true
 8 info reaper-actions-server@0.0.1 Failed to exec start script
-9 verbose stack Error: reaper-actions-server@0.0.1 start: `node index.js`
+9 verbose stack Error: reaper-actions-server@0.0.1 start: `node ./app/server`
 9 verbose stack Exit status 1
-9 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:213:16)
+9 verbose stack     at EventEmitter.<anonymous> (c:\Program Files\nodejs\node_modules\npm\lib\utils\lifecycle.js:213:16)
 9 verbose stack     at EventEmitter.emit (events.js:110:17)
-9 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:14:12)
+9 verbose stack     at ChildProcess.<anonymous> (c:\Program Files\nodejs\node_modules\npm\lib\utils\spawn.js:24:14)
 9 verbose stack     at ChildProcess.emit (events.js:110:17)
-9 verbose stack     at maybeClose (child_process.js:1008:16)
-9 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:1080:5)
+9 verbose stack     at maybeClose (child_process.js:1015:16)
+9 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:1087:5)
 10 verbose pkgid reaper-actions-server@0.0.1
-11 verbose cwd /Users/KevinY/Development/Web/reaper-actions-server
-12 error Darwin 14.1.0
-13 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
-14 error node v0.12.0
-15 error npm  v2.5.1
+11 verbose cwd c:\Users\Kevin\Documents\Development\reaper-actions-server
+12 error Windows_NT 6.3.9600
+13 error argv "c:\\Program Files\\nodejs\\node.exe" "c:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "start"
+14 error node v0.12.4
+15 error npm  v2.10.1
 16 error code ELIFECYCLE
-17 error reaper-actions-server@0.0.1 start: `node index.js`
+17 error reaper-actions-server@0.0.1 start: `node ./app/server`
 17 error Exit status 1
-18 error Failed at the reaper-actions-server@0.0.1 start script 'node index.js'.
+18 error Failed at the reaper-actions-server@0.0.1 start script 'node ./app/server'.
 18 error This is most likely a problem with the reaper-actions-server package,
 18 error not with npm itself.
 18 error Tell the author that this fails on your system:
-18 error     node index.js
+18 error     node ./app/server
 18 error You can get their info via:
 18 error     npm owner ls reaper-actions-server
 18 error There is likely additional logging output above.

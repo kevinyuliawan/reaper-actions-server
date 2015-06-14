@@ -3,7 +3,7 @@ function os(){
   if(temp.indexOf("darwin")>=0){
     return "macintosh";
   }
-  else if(os.indexOf("win")>=0){
+  else if(temp.indexOf("win")>=0){
     return "windows";
   }
   else{
