@@ -3,6 +3,7 @@ var http = require("http");
 var express = require("express");
 var app = express();
 var port = process.env.PORT || 5000;
+var routes = require('./routes.js');
 var bodyParser = require('body-parser');
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -27,16 +28,30 @@ wss.on("connection", function(ws) {
 });
 
 //set up the broadcast function
-wss.broadcast = function broadcast(data){
-  wss.clients.forEach(function each(client){
+wss.broadcast = function(data){
+  wss.clients.forEach(function(client){
       client.send(data);
   });
   console.log("broadcasted: " + data);
 };
 
+var song = "Queen - Don't Stop Me Now"; //initialize the song on first request
+app.get('/song', function(req, res){
+  res.send(JSON.stringify({ //only send as needed, no need to broadcast
+    song: song
+  }));
+});
+
 app.post('/song', function(req, res){
+  song = req.body.song;
   wss.broadcast(JSON.stringify({
-    song: req.body.song
+    song: song
   }));
   res.end("OK");
 });
+
+//the keyboard actions
+app.get('/actions/previous', routes.previous);
+app.get('/actions/next', routes.next);
+app.get('/actions/playstop', routes.playstop);
+app.get('/actions/record', routes.record);
