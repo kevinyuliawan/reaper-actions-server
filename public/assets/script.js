@@ -31,8 +31,9 @@ function calcTime(){
   var hour = now.getHours();
   var minute = now.getMinutes();
   var denote = 'AM';
-  if(hour >=13){
-    hour = hour - 12;
+  if(hour === 0){ hour = 12; }
+  if(hour >=12){
+    hour = hour === 12 ? 12 : hour - 12;
     denote = 'PM';
   }
   if(minute <= 9){
@@ -74,7 +75,6 @@ function calcActions(){
   simulateToggle.record = 0; //initialize these property to 0 to treat it as a static variable. confusing to do this here, I know
   simulateToggle.playstop = 0;
   $.each(allObj, function(key, val){  
-    var valSelector = $(val);
     all = all.add(val); //set up the all selector
     function setupClickHandler(next, ignore){
       $(val).click(function(){
@@ -110,7 +110,7 @@ function calcActions(){
           simulateToggle.playstop = 0;
           calculateToggleStyling();
           all.removeClass("active");
-          simulatePress(valSelector);
+          simulatePress(val);
           $.get(key, function(data){
             setAlert(data);
           });
@@ -118,7 +118,7 @@ function calcActions(){
         break;
       default:
         setupClickHandler(function(){
-          simulatePress(valSelector); //don't need to remove everything else when pressing volume buttons
+          simulatePress(val); //don't need to remove everything else when pressing volume buttons
           $.get(key, function(data){
             setAlert(data);
           })
@@ -127,9 +127,8 @@ function calcActions(){
   });
 }
 
-
-
-function simulatePress(selector){
+function simulatePress(val){
+  var selector = $(val);
   selector.addClass("active");
   setTimeout(function(){
     selector.removeClass("active");
@@ -186,7 +185,7 @@ function updatePlayStop(){
 }
 
 function setAlert(text){
-  $('.alert-info').html(text).fadeIn(400).delay(400).fadeOut(400);
+  $('.alert-info').html(text).fadeIn(400).delay(100).fadeOut(400);
 }
 
 function calcSubmit(){
