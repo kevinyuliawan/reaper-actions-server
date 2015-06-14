@@ -61,11 +61,11 @@
         background-color:#B41909;
       }
 
-      div.action:hover, div.action.active{
+      div.action:focus, div.action.active{
         background-color:#1E4166;
       }
 
-      div.action.record:hover, div.action.record.active{
+      div.action.record:focus, div.action.record.active{
         background-color:#9B0000;
       }
 

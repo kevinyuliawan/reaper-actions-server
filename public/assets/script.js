@@ -76,6 +76,7 @@ function calcActions(){
       case '.action-play-stop':
       case '.action-record':
         valSelector.click(function(){
+          //todo: disable buttons from being spammed
           if(simulateToggle.record === 1){ //if you hit record again while it's recording, then stop it/send a spacebar
             $.get("/actions/playstop", function(data){
               setAlert(data);
