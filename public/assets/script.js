@@ -69,7 +69,7 @@ function calcActions(){
     "/actions/volume-down/ky": '.action-volume-down.volume-ky',
     "/actions/volume-up/ky": '.action-volume-up.volume-ky',
     "/actions/volume-down/wy": '.action-volume-down.volume-wy',
-    "/actions/volume-up/wy": '.action-volume-down.volume-wy'
+    "/actions/volume-up/wy": '.action-volume-up.volume-wy'
   }
   var all = $();
   simulateToggle.record = 0; //initialize these property to 0 to treat it as a static variable. confusing to do this here, I know

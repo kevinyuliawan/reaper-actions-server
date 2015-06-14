@@ -58,4 +58,4 @@ app.get('/actions/record', routes.record);
 app.get('/actions/volume-down/ky', routes.volumeDownKy);
 app.get('/actions/volume-down/wy', routes.volumeDownWy);
 app.get('/actions/volume-up/ky', routes.volumeUpKy);
-app.get('/actions-volume-up/wy', routes.volumeUpWy);
+app.get('/actions/volume-up/wy', routes.volumeUpWy);
