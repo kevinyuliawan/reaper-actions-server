@@ -42,15 +42,23 @@ function sendKey(command) {
 
 module.exports = function ClientActions(wss){
   this.previous = function(req, res){
-    res.send("previous!");
-    sendKey("previous");
+    if(wss.record === "0" && wss.playstop === "0"){
+      sendKey("previous");
+      res.send("previous!");
+    }else{
+      res.send("please stop playback/recording first");
+    }
     wss.record = wss.playstop = "0";
     wss.broadcastState();
   }
 
   this.next = function(req, res){
-    res.send("next!");
-    sendKey("next");
+    if(wss.record==="0" && wss.playstop === "0"){
+      sendKey("next");  
+      res.send("next!");
+    }else{
+      res.send("please stop playback/recording first");
+    }      
     wss.record = wss.playstop = "0";
     wss.broadcastState();
   }

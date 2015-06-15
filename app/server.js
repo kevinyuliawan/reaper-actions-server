@@ -47,11 +47,11 @@ wss.broadcastState = function(){
 wss.song = "Queen - Don't Stop Me Now"; 
 wss.record = wss.playstop = "0";
 app.get('/state', function(req, res){
-  res.send({
+  res.send(JSON.stringify({
     song: wss.song,
     record: wss.record,
     playstop: wss.playstop
-  });
+  }));
 });
 
 var broadcastActions = new BroadcastActions(wss); //set up with the wss

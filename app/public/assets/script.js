@@ -53,10 +53,10 @@ function calcTime(){
 
 function calcState(){
   $.get("/state", function(data){
-    state = data;
+    state = JSON.parse(data);
     parseSong(state.song);
     calculateToggleStyling();
-  })
+  });
 }
 
 function parseSong(song){
@@ -113,7 +113,6 @@ function calcActions(){
       case '.action-backward':
       case '.action-forward':
         setupClickHandler(function(){
-          all.removeClass("active");    
           simulatePress(val);
           $.get(key, function(data){
             setAlert(data);
@@ -140,9 +139,15 @@ function simulatePress(val){
 }
 
 function calculateToggleStyling(){
-  if(state.playstop === "1"){ $('.action-play-stop').addClass("active") }
+  if(state.playstop === "1"){ 
+    $('.action-play-stop').addClass("active"); 
+    $('.action-forward, .action-backward').attr("disabled","disabled"); 
+  }
   else{ $('.action-play-stop').removeClass("active") }
-  if(state.record === "1"){ $('.action-record').addClass("active") }
+  if(state.record === "1"){ 
+    $('.action-record').addClass("active")
+    $('.action-forward, .action-backward').attr("disabled","disabled");
+  }
   else{ $('.action-record').removeClass("active") }
   updatePlayStop();
 }
