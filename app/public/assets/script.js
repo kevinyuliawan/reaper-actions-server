@@ -39,7 +39,7 @@ function calcTime(){
   var minute = now.getMinutes();
   var denote = 'AM';
   if(hour === 0){ hour = 12; }
-  if(hour >=12){
+  else if(hour >=12){
     hour = hour === 12 ? 12 : hour - 12;
     denote = 'PM';
   }
