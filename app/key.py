@@ -10,8 +10,9 @@ keymap = {
     #https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
     "previous": int(0xDB), #the "[{" key
     "next": int(0xDD), #the "]}" key
-    "playstop": win32con.VK_SPACE,
-    "record": win32con.VK_F1
+    "playstop": win32con.VK_F10,
+    "record": win32con.VK_F1,
+    "recordorig": win32con.VK_F12
 }
 
 def sendKey(button):

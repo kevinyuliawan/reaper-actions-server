@@ -44,14 +44,14 @@ module.exports = function ClientActions(wss){
   this.previous = function(req, res){
     res.send("previous!");
     sendKey("previous");
-    wss.record = wss.playstop = 0;
+    wss.record = wss.playstop = "0";
     wss.broadcastState();
   }
 
   this.next = function(req, res){
     res.send("next!");
     sendKey("next");
-    wss.record = wss.playstop = 0;
+    wss.record = wss.playstop = "0";
     wss.broadcastState();
   }
 
@@ -59,16 +59,16 @@ module.exports = function ClientActions(wss){
     //spacebar
     res.send("playstop!");
     sendKey("playstop");
-    if(wss.playstop === 0 && wss.record === 0){
-      wss.playstop = 1; wss.record = 0;
+    if(wss.playstop === "0" && wss.record === "0"){
+      wss.playstop = "1"; wss.record = "0";
     }
-    else if(wss.playstop === 0 && wss.record === 1){ //not possible
+    else if(wss.playstop === "0" && wss.record === "1"){ //not possible
     }
-    else if(wss.playstop === 1 && wss.record === 0){
-      wss.playstop = 0; 
+    else if(wss.playstop === "1" && wss.record === "0"){
+      wss.playstop = "0"; 
     }
-    else if(wss.playstop === 1 && wss.record === 1){
-      wss.playstop = 0; wss.record = 0;
+    else if(wss.playstop === "1" && wss.record === "1"){
+      wss.playstop = "0"; wss.record = "0";
     }
     wss.broadcastState();
   }
@@ -76,18 +76,25 @@ module.exports = function ClientActions(wss){
   this.record = function(req, res){
     //Ctrl+R
     res.send("record!");
-    sendKey("record");
-    if(wss.record === 0 && wss.playstop === 0){ 
-      wss.record = 1; wss.playstop = 1;
+    console.log(wss.record,wss.playstop);
+    if(wss.record === "0" && wss.playstop === "0"){ 
+      console.log("recording1...");
+      wss.record = "1"; wss.playstop = "1";
+      sendKey("record");
     }
-    else if(wss.record === 0 && wss.playstop === 1){
-      wss.record = 1; wss.playstop = 1;
+    else if(wss.record === "0" && wss.playstop === "1"){
+      console.log("regular recording...");
+      wss.record = "1"; wss.playstop = "1";
+      sendKey("recordorig");
     }
-    else if(wss.record === 1 && wss.playstop === 0){ //not possible
-
+    else if(wss.record === "1" && wss.playstop === "0"){ //not possible
+      console.log("recording2...");
+      sendKey("record");
     }
-    else if(wss.record === 1 && wss.playstop === 1){
-      wss.record = 0; wss.playstop = 0;
+    else if(wss.record === "1" && wss.playstop === "1"){
+      console.log("recording3...");
+      wss.record = "0"; wss.playstop = "0";
+      sendKey("record");
     }
     wss.broadcastState();
   }

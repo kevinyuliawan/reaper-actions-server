@@ -1,12 +1,13 @@
 var state = { //global object to hold the client state, needs to be in sync with the server/Reaper
-  record: 0,
-  playstop: 0,
+  record: "0",
+  playstop: "0",
   song: ''
 }
 var host = location.origin.replace(/^http/, 'ws')
 var ws = new WebSocket(host);
 ws.onmessage = function (event) {
-  state = event.data;
+  state = JSON.parse(event.data);
+  console.log(state)
   parseSong(state.song);
   calculateToggleStyling();
 };
@@ -81,8 +82,8 @@ function calcActions(){
     "/actions/volume-up/wy": '.action-volume-up.volume-wy'
   }
   var all = $();
-  state.record = 0; //initialize these properties to 0 to treat it as a static variable. confusing to do this here, I know
-  state.playstop = 0;
+  state.record = "0"; //initialize these properties to 0 to treat it as a static variable. confusing to do this here, I know
+  state.playstop = "0";
   $.each(allObj, function(key, val){  
     all = all.add(val); //set up the all selector
     function setupClickHandler(next, ignore){
@@ -99,7 +100,7 @@ function calcActions(){
       case '.action-play-stop':
       case '.action-record':
         setupClickHandler(function(){
-          if(state.record === 1){ //if you hit record again while it's recording, then stop it/send a spacebar
+          if(state.record === "1"){ //if you hit record again while it's recording, then stop it/send a spacebar
             $.get("/actions/playstop", function(data){
               setAlert(data);
             });
@@ -140,9 +141,9 @@ function simulatePress(val){
 }
 
 function calculateToggleStyling(){
-  if(state.playstop === 1){ $('.action-play-stop').addClass("active") }
+  if(state.playstop === "1"){ $('.action-play-stop').addClass("active") }
   else{ $('.action-play-stop').removeClass("active") }
-  if(state.record === 1){ $('.action-record').addClass("active") }
+  if(state.record === "1"){ $('.action-record').addClass("active") }
   else{ $('.action-record').removeClass("active") }
   updatePlayStop();
 }
