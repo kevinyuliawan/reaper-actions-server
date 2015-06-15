@@ -2,7 +2,8 @@ module.exports = function BroadcastActions(wss){
   this.updatestate = function(req, res){
     wss.record = req.body.record;
     wss.playstop = req.body.playstop;
-    console.log(wss.record, wss.playstop);
+    if(req.body.song){ wss.song = req.body.song }
+    // console.log(wss.record, wss.playstop);
     wss.broadcastState();
     res.end("OK");
   }

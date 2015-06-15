@@ -7,7 +7,6 @@ var host = location.origin.replace(/^http/, 'ws')
 var ws = new WebSocket(host);
 ws.onmessage = function (event) {
   state = JSON.parse(event.data);
-  console.log(state)
   parseSong(state.song);
   calculateToggleStyling();
 };
