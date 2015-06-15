@@ -1,13 +1,20 @@
+var state = { //global object to hold the client state, needs to be in sync with the server/Reaper
+  record: 0,
+  playstop: 0,
+  song: ''
+}
 var host = location.origin.replace(/^http/, 'ws')
 var ws = new WebSocket(host);
 ws.onmessage = function (event) {
-  parseSong(JSON.parse(event.data).song);
+  state = event.data;
+  parseSong(state.song);
+  calculateToggleStyling();
 };
 
 $(window).load(function(){
   calcStyling();
   calcTime();
-  calcSong();
+  calcState();
   calcActions();
   calcSubmit();
   $(window).resize(function(){
@@ -44,10 +51,12 @@ function calcTime(){
   setTimeout(calcTime,1000);
 }
 
-function calcSong(){
-  $.get("/song", function(data){
-    parseSong(JSON.parse(data).song);
-  });
+function calcState(){
+  $.get("/state", function(data){
+    state = data;
+    parseSong(state.song);
+    calculateToggleStyling();
+  })
 }
 
 function parseSong(song){
@@ -72,8 +81,8 @@ function calcActions(){
     "/actions/volume-up/wy": '.action-volume-up.volume-wy'
   }
   var all = $();
-  simulateToggle.record = 0; //initialize these property to 0 to treat it as a static variable. confusing to do this here, I know
-  simulateToggle.playstop = 0;
+  state.record = 0; //initialize these properties to 0 to treat it as a static variable. confusing to do this here, I know
+  state.playstop = 0;
   $.each(allObj, function(key, val){  
     all = all.add(val); //set up the all selector
     function setupClickHandler(next, ignore){
@@ -81,7 +90,7 @@ function calcActions(){
         if($(val).attr("disabled")) return; //dont do anything if button is currently disabled
         if(!ignore){ //used for the volume, dont want to ignore if pressed multiple times
           all.attr("disabled", "disabled");
-          setTimeout(function(){ all.removeAttr("disabled") }, 500)
+          setTimeout(function(){ all.removeAttr("disabled") }, 300)
         }
         next();
       });
@@ -90,7 +99,7 @@ function calcActions(){
       case '.action-play-stop':
       case '.action-record':
         setupClickHandler(function(){
-          if(simulateToggle.record === 1){ //if you hit record again while it's recording, then stop it/send a spacebar
+          if(state.record === 1){ //if you hit record again while it's recording, then stop it/send a spacebar
             $.get("/actions/playstop", function(data){
               setAlert(data);
             });
@@ -99,17 +108,12 @@ function calcActions(){
               setAlert(data);
             })
           }
-          simulateToggle(val);
-          calculateToggleStyling();
         });
         break;
       case '.action-backward':
       case '.action-forward':
         setupClickHandler(function(){
-          simulateToggle.record = 0; //reset these in case previous/next is being called while it was recording
-          simulateToggle.playstop = 0;
-          calculateToggleStyling();
-          all.removeClass("active");
+          all.removeClass("active");    
           simulatePress(val);
           $.get(key, function(data){
             setAlert(data);
@@ -121,7 +125,7 @@ function calcActions(){
           simulatePress(val); //don't need to remove everything else when pressing volume buttons
           $.get(key, function(data){
             setAlert(data);
-          })
+          });
         }, true); //ignore the setting of disabled by setting 'ignore' to true
     }
   });
@@ -135,41 +139,10 @@ function simulatePress(val){
   }, 40);
 }
 
-function simulateToggle(val){ //use the string for easier comparison and so we only have to run a jQuery selector once
-  var self = simulateToggle;
-  if(val === '.action-record'){
-    if(self.record === 0 && self.playstop === 0){ 
-      self.record = 1; self.playstop = 1;
-    }
-    else if(self.record === 0 && self.playstop === 1){
-      self.record = 1; self.playstop = 1;
-    }
-    else if(self.record === 1 && self.playstop === 0){ //not possible
-
-    }
-    else if(self.record === 1 && self.playstop === 1){
-      self.record = 0; self.playstop = 0;
-    } 
-  }else{
-    if(self.playstop === 0 && self.record === 0){
-      self.playstop = 1; self.record = 0;
-    }
-    else if(self.playstop === 0 && self.record === 1){ //not possible
-    }
-    else if(self.playstop === 1 && self.record === 0){
-      self.playstop = 0; 
-    }
-    else if(self.playstop === 1 && self.record === 1){
-      self.playstop = 0; self.record = 0;
-    }
-  }
-}
-
 function calculateToggleStyling(){
-  var self = simulateToggle;
-  if(self.playstop === 1){ $('.action-play-stop').addClass("active") }
+  if(state.playstop === 1){ $('.action-play-stop').addClass("active") }
   else{ $('.action-play-stop').removeClass("active") }
-  if(self.record === 1){ $('.action-record').addClass("active") }
+  if(state.record === 1){ $('.action-record').addClass("active") }
   else{ $('.action-record').removeClass("active") }
   updatePlayStop();
 }

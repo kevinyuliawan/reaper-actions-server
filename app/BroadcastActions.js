@@ -1,17 +1,15 @@
 module.exports = function BroadcastActions(wss){
-  this.playstop = function(req, res){
-
-  }
-
-  this.record = function(req, res){
-
+  this.updatestate = function(req, res){
+    wss.record = req.body.record;
+    wss.playstop = req.body.playstop;
+    console.log(wss.record, wss.playstop);
+    wss.broadcastState();
+    res.end("OK");
   }
 
   this.updatesong = function(req, res){
     wss.song = req.body.song;
-    wss.broadcast(JSON.stringify({
-      song: wss.song
-    }));
+    wss.broadcastState();
     res.end("OK");
   }
 };

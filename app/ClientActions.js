@@ -44,23 +44,52 @@ module.exports = function ClientActions(wss){
   this.previous = function(req, res){
     res.send("previous!");
     sendKey("previous");
+    wss.record = wss.playstop = 0;
+    wss.broadcastState();
   }
 
   this.next = function(req, res){
     res.send("next!");
     sendKey("next");
+    wss.record = wss.playstop = 0;
+    wss.broadcastState();
   }
 
   this.playstop = function(req, res){
     //spacebar
     res.send("playstop!");
     sendKey("playstop");
+    if(wss.playstop === 0 && wss.record === 0){
+      wss.playstop = 1; wss.record = 0;
+    }
+    else if(wss.playstop === 0 && wss.record === 1){ //not possible
+    }
+    else if(wss.playstop === 1 && wss.record === 0){
+      wss.playstop = 0; 
+    }
+    else if(wss.playstop === 1 && wss.record === 1){
+      wss.playstop = 0; wss.record = 0;
+    }
+    wss.broadcastState();
   }
 
   this.record = function(req, res){
     //Ctrl+R
     res.send("record!");
     sendKey("record");
+    if(wss.record === 0 && wss.playstop === 0){ 
+      wss.record = 1; wss.playstop = 1;
+    }
+    else if(wss.record === 0 && wss.playstop === 1){
+      wss.record = 1; wss.playstop = 1;
+    }
+    else if(wss.record === 1 && wss.playstop === 0){ //not possible
+
+    }
+    else if(wss.record === 1 && wss.playstop === 1){
+      wss.record = 0; wss.playstop = 0;
+    }
+    wss.broadcastState();
   }
 
   this.volumeDownKy = function(req, res){

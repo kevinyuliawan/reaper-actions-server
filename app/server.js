@@ -34,13 +34,24 @@ wss.broadcast = function(data){
   console.log("broadcasted: " + data);
 };
 
-//initialize the song on first request
+wss.broadcastState = function(){
+  wss.broadcast({
+    song: wss.song,
+    record: wss.record,
+    playstop: wss.playstop
+  });
+}
+
+//initialize the song and states on first request
 //arbitrarily put it on the wss object so that that's the only thing we have to pass around
 wss.song = "Queen - Don't Stop Me Now"; 
-app.get('/song', function(req, res){
-  res.send(JSON.stringify({ //only send as needed, no need to broadcast
-    song: wss.song
-  }));
+wss.record = wss.playstop = 0;
+app.get('/state', function(req, res){
+  res.send({
+    song: wss.song,
+    record: wss.record,
+    playstop: wss.playstop
+  });
 });
 
 var broadcastActions = new BroadcastActions(wss); //set up with the wss
@@ -56,6 +67,5 @@ app.get('/actions/volume-down/wy', clientActions.volumeDownWy);
 app.get('/actions/volume-up/ky', clientActions.volumeUpKy);
 app.get('/actions/volume-up/wy', clientActions.volumeUpWy);
 
-app.post('/actions/playstop', broadcastActions.playstop);
-app.post('/actions/record', broadcastActions.record);
+app.post('/actions/updatestate', broadcastActions.updateState);
 app.post('/actions/updatesong', broadcastActions.updatesong);
