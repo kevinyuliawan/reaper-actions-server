@@ -14,7 +14,6 @@ ws.onmessage = function (event) {
 $(window).load(function(){
   calcStyling();
   calcTime();
-  calcState();
   calcActions();
   calcSubmit();
   $(window).resize(function(){
@@ -49,14 +48,6 @@ function calcTime(){
   var str = hour + ':' + minute + ' ' + denote;
   $('.display-time').html(str);
   setTimeout(calcTime,1000);
-}
-
-function calcState(){
-  $.get("/state", function(data){
-    state = JSON.parse(data);
-    parseSong(state.song);
-    calculateToggleStyling();
-  });
 }
 
 function parseSong(song){

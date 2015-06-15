@@ -48,7 +48,6 @@ module.exports = function ClientActions(wss){
     }else{
       res.send("please stop playback/recording first");
     }
-    wss.record = wss.playstop = "0";
     wss.broadcastState();
   }
 
@@ -59,7 +58,6 @@ module.exports = function ClientActions(wss){
     }else{
       res.send("please stop playback/recording first");
     }      
-    wss.record = wss.playstop = "0";
     wss.broadcastState();
   }
 
