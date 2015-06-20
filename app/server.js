@@ -22,7 +22,7 @@ console.log(address);
 
 //sms the server addresses to Ky and Wy
 var TwilioWrapper = require("./TwilioWrapper");
-new TwilioWrapper().sendMessages(address);
+//new TwilioWrapper().sendMessages(address);
 
 //start up the websocket server
 var wss = new WebSocketServer({server: server});

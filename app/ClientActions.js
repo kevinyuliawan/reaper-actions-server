@@ -29,7 +29,7 @@ function sendKey(command) {
         foundWin32 = stdout.trim();
         exec(key(foundWin32,command), function(error, stdout){
           if(error!=null){ console.log("uhh ohh...", error); }
-          else{ console.log("done"); }
+          else{ /* console.log("done"); */ }
         });
       }
     });

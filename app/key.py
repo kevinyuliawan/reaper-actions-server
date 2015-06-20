@@ -12,7 +12,11 @@ keymap = {
     "next": int(0xDD), #the "]}" key
     "playstop": win32con.VK_F10,
     "record": win32con.VK_F1,
-    "recordorig": win32con.VK_F12
+    "recordorig": win32con.VK_F12,
+    "volumeDownKy": win32con.VK_F2,
+    "volumeDownWy": win32con.VK_F3,
+    "volumeUpKy": int(0xBF), #the "/" key
+    "volumeUpWy": int(0xDC) #the "\" key
 }
 
 def sendKey(button):
